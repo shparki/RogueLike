@@ -37,10 +37,13 @@ public class Window {
 		content.setFocusable(true);
 		content.requestFocus();
 		content.addKeyListener(input);
+		content.addMouseListener(input);
+		content.addMouseMotionListener(input);
 	}
 	
 	public static int getWidth() { return content.getWidth(); }
 	public static int getHeight() { return content.getHeight(); }
+	public static Point2D getCenter() { return new Point2D(getWidth() / 2, getHeight() / 2); }
 	
 	public static String getTitle() { return frame.getTitle(); }
 	public static void setTitle(String title) { frame.setTitle(title); }

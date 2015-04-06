@@ -1,6 +1,7 @@
 package io.shparki.rogue.entities;
 
-import io.shparki.rogue.Engine;
+import io.shparki.rogue.Game;
+import io.shparki.rogue.gfx.Window;
 import io.shparki.rogue.io.Input;
 import io.shparki.rogue.util.Point2D;
 import io.shparki.rogue.util.Rectangle;
@@ -12,8 +13,8 @@ import java.awt.event.KeyEvent;
 
 public class Player {
 	
-	public static final int SIZE = 16;
-	public static final Vector2D VELOCITY = new Vector2D(100, 100);
+	public static double SIZE = 16;
+	public static final Vector2D VELOCITY = new Vector2D(250, 250);
 	
 	public Point2D location;
 	public Point2D startLocation;
@@ -26,6 +27,9 @@ public class Player {
 	
 	public void update(){
 		updateMovement();
+		
+		if (Input.isKeyDown(KeyEvent.VK_P)) { SIZE += .5; }
+		if (Input.isKeyDown(KeyEvent.VK_O)) { SIZE -= .5; }
 	}
 	
 	
@@ -38,11 +42,11 @@ public class Player {
 			boolean collides = false;
 			double newY = 0;
 			
-			for (Rectangle r : Engine.collidingEntities){
+			for (Rectangle r : Game.map.getCollidingEntities()){
 				if (location.getY() < r.getY() + r.getHeight() && location.getY() + SIZE > r.getY() + r.getHeight()){
 					if (location.getX() < r.getX() + r.getWidth() && location.getX() + SIZE > r.getX()){
 						collides = true;
-						newY = r.getY() + r.getHeight();
+						newY = r.getY() + r.getHeight() + 1;
 						break;
 					}
 				}
@@ -54,7 +58,7 @@ public class Player {
 			boolean collides = false;
 			double newY = 0;
 			
-			for (Rectangle r : Engine.collidingEntities){
+			for (Rectangle r : Game.map.getCollidingEntities()){
 				if (location.getY() + SIZE > r.getY() && location.getY() < r.getY()){
 					if (location.getX() < r.getX() + r.getWidth() && location.getX() + SIZE > r.getX()){
 						collides = true;
@@ -71,11 +75,11 @@ public class Player {
 			boolean collides = false;
 			double newX = 0;
 			
-			for (Rectangle r: Engine.collidingEntities){
+			for (Rectangle r: Game.map.getCollidingEntities()){
 				if (location.getX() < r.getX() + r.getWidth() && location.getX() + SIZE > r.getX() + r.getWidth()){
 					if (location.getY() < r.getY() + r.getHeight() && location.getY() + SIZE > r.getY()){
 						collides = true;
-						newX = r.getX() + r.getWidth();
+						newX = r.getX() + r.getWidth() + 1;
 						break;
 					}
 				}
@@ -88,7 +92,7 @@ public class Player {
 			boolean collides = false;
 			double newX = 0;
 			
-			for (Rectangle r: Engine.collidingEntities){
+			for (Rectangle r: Game.map.getCollidingEntities()){
 				if (location.getX() + SIZE > r.getX() && location.getX() < r.getX()){
 					if (location.getY() < r.getY() + r.getHeight() && location.getY() + SIZE > r.getY()){
 						collides = true;
@@ -100,12 +104,13 @@ public class Player {
 			
 			if (collides) location.setX(newX - SIZE);
 		}
+		Window.offset.set(location);
 	}
 	
 	
 	public void render(Graphics2D g2d){
-		g2d.setColor(Color.MAGENTA);
-		g2d.fillRect((int)location.getX(), (int)location.getY(), SIZE, SIZE);
+		if (SIZE >= 0) { g2d.setColor(Color.MAGENTA); } else { g2d.setColor(Color.YELLOW); }
+		g2d.fillRect((int)(Window.getWidth() / 2 - SIZE / 2), (int)(Window.getHeight() / 2 - SIZE / 2), (int)SIZE, (int)SIZE);
 	}
 
 	

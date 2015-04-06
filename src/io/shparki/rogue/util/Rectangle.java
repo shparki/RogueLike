@@ -23,4 +23,16 @@ public class Rectangle {
 	
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
+	
+	public Point2D[] getVertices(){
+		Point2D[] points = new Point2D[4];
+		
+		points[0] = new Point2D(x, y);
+		points[1] = new Point2D(x + width, y);
+		points[2] = new Point2D(x, y + height);
+		points[3] = new Point2D(x + width, y + height);
+		
+		return points;
+	}
+	
 }

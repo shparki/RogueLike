@@ -12,9 +12,6 @@ import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
 public class Engine extends Canvas implements Runnable{
-	
-	public static ArrayList<Rectangle> collidingEntities = new ArrayList<Rectangle>();
-	
 	public static final int WIDTH = 1200;
 	public static final int HEIGHT = WIDTH / 16 * 9;
 	public static final String TITLE = "RogueLike";

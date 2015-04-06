@@ -81,4 +81,8 @@ public class Vector2D {
 		return v;
 	}
 	public Vector2D getClone() { return new Vector2D(x, y); }
+	
+	public static Vector2D getVector2D(Point2D p1, Point2D p2){
+		return new Vector2D(p2.getX() - p1.getX(), p2.getY() - p1.getY());
+	}
 }
