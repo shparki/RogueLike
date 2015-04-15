@@ -3,6 +3,7 @@ package io.shparki.rogue.gfx;
 import io.shparki.rogue.util.Point2D;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 public class Render {
 	
@@ -46,5 +47,27 @@ public class Render {
 		drawLine(x1 + p.getX(), y1 + p.getY(), x2 + p.getX(), y2 + p.getY(), g2d);
 	}
 	
+	public static void drawPolygon(ArrayList<Point2D> points, Graphics2D g2d){
+		int[] xPoints = new int[points.size()];
+		int[] yPoints = new int[points.size()];
+		
+		for (int i = 0; i < points.size(); i++){
+			xPoints[i] = (int)(points.get(i).getX() - Window.offset.getX());
+			yPoints[i] = (int)(points.get(i).getY() - Window.offset.getY());
+		}
+		
+		g2d.drawPolygon(xPoints, yPoints, points.size());
+	}
+	public static void drawPolygonRelativeTo(Point2D p, ArrayList<Point2D> points, Graphics2D g2d){
+		int[] xPoints = new int[points.size()];
+		int[] yPoints = new int[points.size()];
+		
+		for (int i = 0; i < points.size(); i++){
+			xPoints[i] = (int)(points.get(i).getX() - Window.offset.getX() + p.getX());
+			yPoints[i] = (int)(points.get(i).getY() - Window.offset.getY() + p.getY());
+		}
+		
+		g2d.drawPolygon(xPoints, yPoints, points.size());
+	}
 	
 }

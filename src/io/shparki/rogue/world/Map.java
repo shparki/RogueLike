@@ -4,10 +4,12 @@ import io.shparki.rogue.entities.Player;
 import io.shparki.rogue.gfx.Render;
 import io.shparki.rogue.gfx.Window;
 import io.shparki.rogue.util.Point2D;
+import io.shparki.rogue.util.Polygon;
 import io.shparki.rogue.util.Rectangle;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,11 +17,20 @@ public class Map {
 	
 	public static final int TILE_SIZE  = 32;
 	public static final int HEIGHT = 25, WIDTH = 25;
-	public static final int SOLID_CHANCE = 50;
+	
+	public static final int INITIALIZED = 0;
+	public static final int INTERIOR = 1;
+	public static final int CHECKED = 2;
+	
 	public int[][] mapValues;
 	private Random rand = new Random();
+	
 	private ArrayList<Rectangle> collidingEntities = new ArrayList<Rectangle>();
 	private ArrayList<ArrayList<Point2D>> vertices = new ArrayList<ArrayList<Point2D>>();
+	private ArrayList<ArrayList<Integer>> vertexTypes = new ArrayList<ArrayList<Integer>>();
+	private ArrayList<Polygon> polygons = new ArrayList<Polygon>();
+	
+	
 	
 	public Map(){
 		mapValues = new int[HEIGHT][WIDTH];
@@ -39,6 +50,8 @@ public class Map {
 		consolidate();
 	}
 	
+	public static final int SOLID_CHANCE = 35;
+
 	public void update(){
 		
 	}
@@ -64,7 +77,8 @@ public class Map {
 	
 	public ArrayList<Rectangle> getCollidingEntities(){ return collidingEntities; }
 	
-	int index = 2;
+	private int index = 2;
+	private Point2D currentPoint = null;
 	public void consolidate(){
 		for (int y = 0; y < HEIGHT; y++){
 			for (int x = 0; x < WIDTH; x++){
@@ -88,10 +102,10 @@ public class Map {
 				}
 			}
 			index --;
+			vertices.add(subVertices);
 		}
-		
-		
 	}
+	
 	public void flood(int x, int y, int valueFrom, int valueTo){
 		if (mapValues[y][x] == valueFrom){
 			mapValues[y][x] = valueTo;
@@ -104,9 +118,31 @@ public class Map {
 			
 		}
 	}
-	
-
-
-
-
+	public static boolean listContainsPoint(ArrayList<Point2D> points, Point2D point){
+		for (Point2D p : points){
+			if (p.equals(point)) return true;
+		}
+		return false;
+	}
+	public static int numberOfPointsInList(ArrayList<Point2D> points, Point2D point){
+		int counter = 0;
+		for (Point2D p : points){
+			if (p.equals(point)) counter ++;
+		}
+		return counter;
+	}
+	public static ArrayList<Point2D> getUniqueValues(ArrayList<Point2D> points){
+		ArrayList<Point2D> uniqueValues = new ArrayList<Point2D>();
+		for (Point2D p : points){
+			if (!listContainsPoint(uniqueValues, p)) uniqueValues.add(p);
+		}
+		return uniqueValues;
+	}
+	public static boolean isPointValidForPolygons(ArrayList<Point2D> points, Point2D point){
+		int numberOfPointsAtLocation = numberOfPointsInList(points, point);
+		if (numberOfPointsAtLocation == 2 || numberOfPointsAtLocation == 4) return false;
+		
+		int numberOfAdjacentVertices = 0;
+		if (numberOfPointsInList(points, new Point2D(point.getX(), point.getY() - 1)) > 1) numberOfAdjacentVertices ++;
+	}
 }

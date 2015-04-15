@@ -46,6 +46,9 @@ public class Point2D {
 	
 	
 	public String toString() { return "(" + x + "," + y + ")"; }
+	public boolean equals(Point2D p){
+		return (p.getX() == x && p.getY() == y);
+	}
 	public Point2D getClone() { return new Point2D(x, y); }
 	
 }
